@@ -1,0 +1,67 @@
+REPORT zteste.
+
+TABLES: ekpo.
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-003.
+
+PARAMETERS: p_a RADIOBUTTON GROUP rb1 USER-COMMAND action,
+            p_b RADIOBUTTON GROUP rb1,
+            p_c RADIOBUTTON GROUP rb1 DEFAULT 'X'.
+
+SELECT-OPTIONS: s_a FOR ekpo-ebeln MODIF ID a,
+                s_b FOR ekpo-ebelp MODIF ID b,
+                s_c FOR ekpo-matnr MODIF ID c.
+
+SELECTION-SCREEN END OF BLOCK b1.
+
+AT SELECTION-SCREEN OUTPUT.
+  PERFORM: modify_screen.
+
+
+FORM modify_screen.
+
+  LOOP AT SCREEN.
+
+    CASE abap_true.
+
+      WHEN p_b.
+        IF screen-group1     = 'a'.
+          screen-active = '0'.
+          MODIFY SCREEN.
+        ELSEIF screen-group1 = 'c'.
+          screen-active = '0'.
+          MODIFY SCREEN.
+        ELSEIF screen-group1 = 'b'.
+          screen-active = '1'.
+          MODIFY SCREEN.
+        ENDIF.
+
+      WHEN p_a.
+        IF screen-group1     = 'a'.
+          screen-active = '1'.
+          MODIFY SCREEN.
+        ELSEIF screen-group1 = 'c'.
+          screen-active = '0'.
+          MODIFY SCREEN.
+        ELSEIF screen-group1 = 'b'.
+          screen-active = '0'.
+          MODIFY SCREEN.
+        ENDIF.
+
+      WHEN p_c.
+        IF screen-group1     = 'a'.
+          screen-active = '0'.
+          MODIFY SCREEN.
+        ELSEIF screen-group1 = 'c'.
+          screen-active = '1'.
+          MODIFY SCREEN.
+        ELSEIF screen-group1 = 'b'.
+          screen-active = '0'.
+          MODIFY SCREEN.
+        ENDIF.
+
+    ENDCASE.
+
+  ENDLOOP.
+
+ENDFORM.
